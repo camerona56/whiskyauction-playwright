@@ -16,9 +16,11 @@ class WhiskyspiderSpider(scrapy.Spider):
         )
 
     async def parse(self, response):
-        yield {
-            'text': response.css('div::text').getall()
-        }
+        products = response.css('div.cardcontent')
+        for item in products:
+            yield {
+            'title': response.css('div.cardcontent-title.cardcontent-description-title::text').get().strip() + " " + response.css('div.cardcontent-description-text::text').get().strip()
+            }
 
 # import scrapy
 
