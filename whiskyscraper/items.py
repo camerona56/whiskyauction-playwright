@@ -1,12 +1,10 @@
-# Define here the models for your scraped items
-#
-# See documentation in:
-# https://docs.scrapy.org/en/latest/topics/items.html
+from scrapy import Item, Field
 
-import scrapy
-
-
-class WhiskyscraperItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+class WhiskyItem(Item):
+    lot_title_1 = Field()
+    lot_title_2 = Field()
+    lot_title = Field()
+    lot_url = Field()
+    auction_lot_id = Field()
+    end_date = Field()
+    hammer_price = Field()
