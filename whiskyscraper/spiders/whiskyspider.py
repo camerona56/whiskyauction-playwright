@@ -19,7 +19,11 @@ class WhiskyspiderSpider(scrapy.Spider):
         products = response.css('div.cardcontent')
         for item in products:
             yield {
-            'title': response.css('div.cardcontent-title.cardcontent-description-title::text').get().strip() + " " + response.css('div.cardcontent-description-text::text').get().strip()
+            'lot_title': item.css('div.cardcontent-title.cardcontent-description-title::text').get().strip() + " " + item.css('div.cardcontent-description-text::text').get().strip(),
+            'lot_url': item.css('a.card-link::attr(href)').get(),
+            # 'auction_lot_id': response.css('').get(),
+            'end_date': item.css('div.cardcontent-title.cardcontent-title-auction::text').get().replace('\n', '').strip(),
+            'hammer_price': item.css('span[id^="card_current_high_bid"]::text').get()
             }
 
 # import scrapy
