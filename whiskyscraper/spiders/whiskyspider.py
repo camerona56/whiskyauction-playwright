@@ -29,7 +29,7 @@ class WhiskyspiderSpider(scrapy.Spider):
         for bottle in bottles:
             whisky = WhiskyItemLoader(item=WhiskyItem(), selector=bottle)
             whisky.add_css('lot_title_1', 'div.cardcontent-title.cardcontent-description-title::text')
-            whisky.add_css('lot_title_2', 'div.cardcontent-description-text::text')
+            whisky.add_css('lot_title_2', 'div.cardcontent-description-text')
             whisky.add_value('lot_title', whisky.get_output_value('lot_title_1') + ' ' + whisky.get_output_value('lot_title_2'))
             whisky.add_css('lot_url', 'a.card-link::attr(href)')
             whisky.add_css('auction_lot_id', 'a.card-link::attr(href)')
@@ -41,7 +41,7 @@ class WhiskyspiderSpider(scrapy.Spider):
 
         self.num_pages += 1
 
-        if self.num_pages < 10:  # Adjust the number of pages to scrape here
+        if self.num_pages < 2:  # Adjust the number of pages to scrape here
             await page.locator("#dt_whiskybrowser_next > .fa-solid").first.click()
             
             await page.wait_for_selector('div.cardcontent-title')
