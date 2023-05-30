@@ -35,13 +35,15 @@ class WhiskyspiderSpider(scrapy.Spider):
             whisky.add_css('auction_lot_id', 'a.card-link::attr(href)')
             whisky.add_css('end_date', 'div.cardcontent-title.cardcontent-title-auction::text')
             whisky.add_css('hammer_price', 'span[id^="card_current_high_bid"]::text')
+            whisky.add_css('auction_name', 'div.cardcontent-title.cardcontent-title-auction::text')
+            whisky.add_value('auction_url', 'https://whiskyauction.com/wac/whiskyBrowser')
             yield whisky.load_item()
 
         
 
         self.num_pages += 1
 
-        if self.num_pages < 2:  # Adjust the number of pages to scrape here
+        if self.num_pages < 3:  # Adjust the number of pages to scrape here - (3 scrapes 2 pages)
             await page.locator("#dt_whiskybrowser_next > .fa-solid").first.click()
             
             await page.wait_for_selector('div.cardcontent-title')

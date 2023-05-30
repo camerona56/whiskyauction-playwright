@@ -8,3 +8,5 @@ class WhiskyItem(Item):
     auction_lot_id = Field()
     end_date = Field()
     hammer_price = Field()
+    auction_name = Field()
+    auction_url = Field()
