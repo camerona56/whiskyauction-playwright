@@ -5,8 +5,10 @@ from whiskyscraper.items import WhiskyItem
 
 class WhiskyspiderSpider(scrapy.Spider):
     name = 'whiskyspider'
-    start_urls = ['https://whiskyauction.com/wac/whiskyBrowser']
+    start_urls = ['https://whiskyauction.com/wac/whiskyBrowser#card-item-null']
+    # change start_page everytime you scrape (1st scrape = 1, 2nd scrape = 500, 3rd scrape = 1000 ...)
     start_page = 500
+    # num pages should always equal 1 here
     num_pages = 1
 
     def start_requests(self):
@@ -20,7 +22,8 @@ class WhiskyspiderSpider(scrapy.Spider):
                     PageMethod('click', '#paginate_input_top'),
                     PageMethod('fill', '#paginate_input_top', str(self.start_page)),
                     PageMethod('press', '#paginate_input_top', 'Enter'),
-                    PageMethod('wait_for_selector', 'div.cardcontent-title')
+                    PageMethod('wait_for_selector', 'div.cardcontent-title'),
+                    PageMethod('wait_for_timeout', 3000)
                 ],
             ),
             callback=self.parse,
@@ -46,7 +49,7 @@ class WhiskyspiderSpider(scrapy.Spider):
 
         self.num_pages += 1
 
-        if self.num_pages < self.start_page + 2:  # Adjust the number of pages to scrape here - (3 scrapes 2 pages)
+        if self.num_pages < 3:  # Adjust the number of pages to scrape here - (3 scrapes 2 pages - 1st scrape = 501, 2nd scrape = 1001, 3rd scrape = 1501)
             await page.locator("#dt_whiskybrowser_next > .fa-solid").first.click()
               
             await page.wait_for_selector('div.cardcontent-title')
@@ -59,7 +62,7 @@ class WhiskyspiderSpider(scrapy.Spider):
                     playwright_include_page=True,
                     playwright_page_methods=[
                         PageMethod('wait_for_selector', 'div.cardcontent-title'),
-                    ],
+                        ],
                     playwright_page=page
                 ),
                 callback=self.parse,
@@ -67,30 +70,3 @@ class WhiskyspiderSpider(scrapy.Spider):
             )    
         else:
             await page.close()
-
-
-
-# page.locator("#paginate_input_top").click()
-# page.locator("#paginate_input_top").fill("500")
-
-
-        # page.locator("#paginate_input_top").click()
-        # page.locator("#paginate_input_top").fill("500")
-        # page.wait_for_selector('div.cardcontent-title')
-
-
-
-
-
-    # page.goto("https://whiskyauction.com/wac/whiskyBrowser")
-    # page.get_by_role("button", name="Auction ").click()
-    # page.get_by_role("button", name="Auction ").click()
-    # page.get_by_role("button", name=" Show results").click()
-    # page.goto("https://whiskyauction.com/wac/whiskyBrowser#card-item-null")
-    # page.locator("div").filter(has_text=re.compile(r"^2023-06$")).first.click()
-
-
-# page.get_by_role("button", name="Auction ").click()
-# page.locator("div").filter(has_text=re.compile(r"^2023-06$")).first.click()
-# page.get_by_role("button", name=" Show results").click()
-
