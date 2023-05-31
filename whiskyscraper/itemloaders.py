@@ -5,8 +5,6 @@ from itemloaders.processors import MapCompose, TakeFirst
 class WhiskyItemLoader(ItemLoader):
     
     default_output_processor = TakeFirst()
-    lot_title_1_in = MapCompose(lambda x : x.strip())
-    lot_title_2_in = MapCompose(lambda x : x.replace('<div class=\"cardcontent-description-text\">', '').replace('<br>', ' ').replace('</div>', '').strip())
     lot_title_in = MapCompose(lambda x : x.strip())
     lot_url_in = MapCompose(lambda x : 'https://whiskyauction.com' + x)
     auction_lot_id_in = MapCompose(lambda x : x.replace('/item/', ''))

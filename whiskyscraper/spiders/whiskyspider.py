@@ -36,9 +36,11 @@ class WhiskyspiderSpider(scrapy.Spider):
         bottles = response.css('div.cardcontent')
         for bottle in bottles:
             whisky = WhiskyItemLoader(item=WhiskyItem(), selector=bottle)
-            whisky.add_css('lot_title_1', 'div.cardcontent-title.cardcontent-description-title::text')
-            whisky.add_css('lot_title_2', 'div.cardcontent-description-text')
-            whisky.add_value('lot_title', whisky.get_output_value('lot_title_1') + ' ' + whisky.get_output_value('lot_title_2'))
+            whisky.add_css(
+                'lot_title', 
+                'div.cardcontent-title.cardcontent-description-title::text, div.cardcontent-description-text::text', 
+                lambda values: ' '.join(map(str.strip, values))
+            )
             whisky.add_css('lot_url', 'a.card-link::attr(href)')
             whisky.add_css('auction_lot_id', 'a.card-link::attr(href)')
             whisky.add_css('end_date', 'div.cardcontent-title.cardcontent-title-auction::text')
