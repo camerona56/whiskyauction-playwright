@@ -1,3 +1,8 @@
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 # Scrapy settings for whiskyscraper project
 #
 # For simplicity, this file contains only settings considered important or
@@ -73,9 +78,10 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'whiskyscraper.pipelines.WhiskyscraperPipeline': 300,
-#}
+ITEM_PIPELINES = {'whiskyscraper.pipelines.MongoDBPipeline': 300,}
+MONGODB_URI = os.getenv('MONGODB_URI')
+MONGODB_DB = os.getenv('MONGODB_DB')
+MONGODB_COLLECTION = os.getenv('MONGODB_COLLECTION')
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
